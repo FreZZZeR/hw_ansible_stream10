@@ -1,0 +1,11 @@
+---
+- name: Install SELinux packages
+  yum:
+    name: policycoreutils-python
+    state: present
+- name: Set SELinux context
+  sefcontext:
+    target: /var/www/{{ ansible_facts['domain'] }}
+    setype: httpd_log_t
+    state: present
+

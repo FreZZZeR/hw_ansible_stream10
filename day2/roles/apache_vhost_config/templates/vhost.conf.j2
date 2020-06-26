@@ -1,0 +1,6 @@
+<VirtualHost {{ ansible_facts['nodename'] }}:80>
+    ServerName {{ ansible_facts['nodename'] }}
+    DocumentRoot /var/www/{{ ansible_facts['domain'] }}/public_html
+    ErrorLog /var/www/{{ ansible_facts['domain'] }}/error_log
+    CustomLog /var/www/{{ ansible_facts['domain'] }}/requests_log combined
+</VirtualHost>

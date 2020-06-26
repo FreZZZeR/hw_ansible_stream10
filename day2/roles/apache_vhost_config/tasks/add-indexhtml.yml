@@ -1,0 +1,9 @@
+---
+- name: Add index.html
+  template:
+    src: index.html.j2
+    dest: /var/www/{{ ansible_facts['domain'] }}/public_html/index.html
+    owner: apache
+    group: apache
+    mode: 0644
+

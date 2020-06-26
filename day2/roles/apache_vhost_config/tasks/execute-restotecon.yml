@@ -1,0 +1,4 @@
+---
+- name: Execute restorecon
+  command: restorecon -Rv "/var/www/{{ ansible_facts['domain'] }}"
+  become: yes

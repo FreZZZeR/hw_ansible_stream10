@@ -1,0 +1,8 @@
+---
+- name: Add folder
+  file:
+    path: /var/www/{{ ansible_facts['domain'] }}
+    owner: apache
+    group: apache
+    mode: 0777
+    state: directory

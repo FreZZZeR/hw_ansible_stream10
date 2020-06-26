@@ -1,0 +1,8 @@
+---
+- name: Add folderpub
+  file:
+    path: /var/www/{{ ansible_facts['domain'] }}/public_html
+    owner: apache
+    group: apache
+    mode: 0755
+    state: directory

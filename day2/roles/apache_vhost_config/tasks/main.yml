@@ -1,0 +1,8 @@
+---
+- include: add-folder.yml
+- include: add-folderpub.yml
+- include: set-selinuxcontext.yml
+- include: execute-restotecon.yml
+- include: add-indexhtml.yml
+- include: config-vhost.yml
+- include: check-httpdstatus.yml
