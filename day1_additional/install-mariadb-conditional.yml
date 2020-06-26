@@ -1,0 +1,13 @@
+---
+- name: Conditional installation mariadb package
+  hosts: nodes
+  tasks:
+  - stat:
+      path: /tmp/database
+    register: result
+  - name: Install MariaDB package
+    yum:
+      name: mariadb-server
+      state: present
+    when: result.stat.exists
+
