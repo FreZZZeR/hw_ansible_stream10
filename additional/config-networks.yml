@@ -1,0 +1,26 @@
+---
+- name: Configuration default networks
+  hosts: nodes
+  vars:
+    grubparams:
+       - 'crashkernel=auto'
+       - 'rd.lvm.lv=centos/root'
+       - 'rd.lvm.lv=centos/swap'
+       - 'net.ifnames=0'
+       - 'biosdevname=0'
+       - 'rhgb'
+       - 'quiet'
+  tasks:
+  - name: Disable NetworkManager
+    service:
+      name: NetworkManager
+      enabled: no
+      state: stopped
+  - name: Configuration GRUB
+    lineinfile:
+      path: /etc/default/grub
+      regexp: '^GRUB_CMDLINE_LINUX='
+      line: "GRUB_CMDLINE_LINUX=\"{{grubparams | join(' ')}}\""
+  - name: Saving GRUB
+    shell: grub2-mkconfig
+

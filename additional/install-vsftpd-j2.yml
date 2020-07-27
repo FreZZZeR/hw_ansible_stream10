@@ -1,0 +1,65 @@
+---
+- name: Set up and configuration vsftpd
+  hosts: nodes
+  vars:
+    anonimus_access: 'YES'
+    anonimus_upload: 'YES'
+  tasks: 
+  - name: Install vsftpd package
+    yum:
+      name: vsftpd
+      state: present
+  - name: Set up config
+    template:
+      src: vsftpd.conf.j2
+      dest: /etc/vsftpd/vsftpd.conf
+      owner: root
+      group: root
+      mode: 0600
+#      backup: yes
+    notify:
+      - restart vsftpd
+  - name: Check vsftpd service is enabled
+    service:
+      name: vsftpd
+      enabled: yes
+  - name: Check vsftpd service is started
+    service:
+      name: vsftpd
+      state: started
+  - name: Open ftp ports
+    firewalld:
+      zone: public
+      service: ftp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  - name: Set permission to public folder
+    file:
+      path: /var/ftp/pub
+      owner: ftp
+      group: ftp
+      mode: 0755
+  - name: Install SELinux packages
+    yum:
+      name: policycoreutils-python
+      state: present
+  - name: Set SELinux context
+    sefcontext:
+      target: /var/ftp/pub
+      setype: public_content_rw_t
+      state: present
+    notify:
+      - execute restorecon
+  - name: Set SELinux ftpd_anon_write boolean True
+    seboolean:
+      name: ftpd_anon_write
+      state: yes
+      persistent: yes
+  handlers:
+    - name: restart vsftpd
+      service:
+        name: vsftpd
+        state: restarted
+    - name: execute restorecon
+      command: restorecon -irv /var/ftp/pub

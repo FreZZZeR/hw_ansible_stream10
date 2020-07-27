@@ -1,0 +1,7 @@
+---
+- name: My playbook
+  hosts: nodes
+  tasks:
+  - name: install vim
+    yum: name=vim
+

@@ -1,0 +1,41 @@
+---
+- name: Set up Apache2
+  hosts: nodes
+  tasks: 
+  - name: Install httpd package
+    yum:
+      name: httpd
+      state: present
+  - name: Check httpd service is enabled
+    service:
+      name: httpd
+      enabled: yes
+  - name: Check httpd service is started
+    service:
+      name: httpd
+      state: started
+  - name: Create index.html file
+    lineinfile:
+      line: Welcome to my web server
+      path: /var/www/html/index.html
+      create: yes
+      owner: apache
+      group: apache
+      mode: '0644'
+  - name: Open tcp port 80
+    firewalld:
+      zone: public
+      service: http
+      permanent: yes
+      immediate: yes
+      state: enabled
+#  - name: Create index.html file
+#    copy:
+#      content: 'Welcome to my web server'
+#      dest: /var/www/html/index.html
+#  - name: Set permission to index.html
+#    file:
+#      dest: /var/www/html/index.html
+#      owner: apache
+#      group: apache
+#      mode: '0644'
